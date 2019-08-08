@@ -1,0 +1,25 @@
+public class MusicBandSupporter{
+  private String name = "";
+  private int numBoxesSold;
+  
+  
+
+  MusicBandSupporter(String name){
+    this.name = name;
+    numBoxesSold = 0;
+  }
+  
+  String getName(){
+    return name;
+  }
+  
+  void updateSales(int sales){
+    numBoxesSold += sales;
+  }
+  
+  public String toString(){
+    String returnString = (name + ":\t " + numBoxesSold + " boxes of bonbons sold." );
+    return returnString ;
+  }
+  
+} 
