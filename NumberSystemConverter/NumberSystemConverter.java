@@ -1,7 +1,6 @@
 public class NumberSystemConverter{
 
-//TODO: figure out how to handle octal numbers
-//TODO: add functionality for any to decimal
+
 //TODO: add functionality for decimal to any
 //TODO: refactor for cleaner convertions/readability/ optimization
 //TODO: Add custom user input for conversions
@@ -19,15 +18,15 @@ public class NumberSystemConverter{
         String binary = "1111";
         System.out.println(binary +  " resolves to " + convertToBase(binary, Base.BINARY, Base.DECIMAL) + " in decimal");
         String binary2 = "1010";
-        System.out.println(binary2 +  " resolves to " + convertToBase(binary2, Base.BINARY, Base.DECIMAL) + " in decimal");
-        String binary3 = "1000000";
-        System.out.println(binary3 +  " resolves to " + convertToBase(binary3, Base.BINARY, Base.DECIMAL) + " in decimal");
+
 
         //case for empty string or 
         String binary4 = "";
         System.out.println(binary4 +  " resolves to " + convertToBase(binary4, Base.BINARY, Base.DECIMAL) + " in decimal");
 
-
+        //octal
+        String octal1 = "0741";
+        System.out.println(octal1 + " resolves to " + convertToBase(octal1, Base.OCTAL, Base.DECIMAL) + " in decimal");
     }
 
 
@@ -67,8 +66,8 @@ public class NumberSystemConverter{
 
     //pass in a digit and then return the correct digit based on the value. 
     public static String hexDigit(double val){
-        String num = 0;
-            switch(val){
+        String num = "0";
+            switch((int)val){
                 case 10:
                     num = "A";
                     break;
