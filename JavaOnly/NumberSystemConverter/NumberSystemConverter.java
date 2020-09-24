@@ -1,3 +1,5 @@
+import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
+
 public class NumberSystemConverter{
 
 
@@ -15,31 +17,52 @@ public class NumberSystemConverter{
 
 
     public static void main(String[]args){
+        //binary
         String binary = "1111";
         System.out.println(binary +  " resolves to " + convertToBase(binary, Base.BINARY, Base.DECIMAL) + " in decimal");
-        String binary2 = "1010";
-
-
-        //case for empty string or 
-        String binary4 = "";
-        System.out.println(binary4 +  " resolves to " + convertToBase(binary4, Base.BINARY, Base.DECIMAL) + " in decimal");
 
         //octal
         String octal1 = "0741";
         System.out.println(octal1 + " resolves to " + convertToBase(octal1, Base.OCTAL, Base.DECIMAL) + " in decimal");
-    }
 
+        //hex
+        String hex = "AA";
+        System.out.println(hex + " resolves to " + convertToBase(hex, Base.HEX, Base.DECIMAL) + " in decimal");
+
+        //Decimal to 
+        String dec = "15";
+        System.out.println(dec + " resolves to " + convertToBase(dec, Base.DECIMAL, Base.BINARY) + " in binary");
+        System.out.println(dec + " resolves to " + convertToBase(dec, Base.DECIMAL, Base.HEX) + " in hex");
+        System.out.println(dec + " resolves to " + convertToBase(dec, Base.DECIMAL, Base.OCTAL) + " in octal");
+
+        
+        
+    }
 
     public static String convertToBase(String num, Base original, Base desired){
        StringBuilder newStr = new StringBuilder();
-        if(desired != Base.DECIMAL){
-           newStr = convertToDecimal(num, original); //returns  a decimal number as a string 
-        }
-        else{
-            return convertToDecimal(num, original).toString();
+        switch(desired){
+            case BINARY: 
+                newStr = convertToDecimal(num, original);
+                newStr.setLength(0); //clears the newstr
+                newStr.append(Integer.toString(Integer.parseInt(num), 2)); // integer.parseInt has built in functions to convert
+                break;
+            case OCTAL: 
+                newStr = convertToDecimal(num, original);
+                newStr.setLength(0);
+                newStr.append(Integer.toString(Integer.parseInt(num), 8));
+                break;
+            case HEX:
+                newStr = convertToDecimal(num, original);
+                newStr.setLength(0);
+                newStr.append(Integer.toString(Integer.parseInt(num), 16));
+                break;
+            default:
+            newStr = convertToDecimal(num, original);
         }
         return newStr.toString();
     }
+
     //converts the base to the decimal value 
     public static StringBuilder convertToDecimal(String num, Base base){
         StringBuilder newStr = new StringBuilder(); // this will be the new number that we convert to 
@@ -62,6 +85,19 @@ public class NumberSystemConverter{
          case DECIMAL: return 10;
         }
         return 10;
+    }
+
+    public static StringBuilder toHex(String num){
+        StringBuilder s = new StringBuilder();
+        return s;
+    }
+    public static StringBuilder toOctal(String num){
+        StringBuilder s = new StringBuilder();
+        return s;
+    }
+    public static StringBuilder toBinary(String num){
+        StringBuilder s = new StringBuilder();
+        return s;
     }
 
     //pass in a digit and then return the correct digit based on the value. 
