@@ -1,7 +1,7 @@
 import java.util.Scanner;
 public class BitOperations {
     //if i use arrays, then all of my operations are linear.... if i use linkedLists, then all of my operations have better time
-
+//TODO: set up the main in a loop so that I can continually run different numbers
     public static void  main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Welcome to the bit operations operator!\nFirst, enter in a binary number");
@@ -48,6 +48,7 @@ public class BitOperations {
 
     }
 
+    //TODO: validate that the number is a BINARY number, will use exceptions here
     public static void validateNumber(String num){
 
     }

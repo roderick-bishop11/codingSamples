@@ -47,19 +47,34 @@ public class BinList {
         last.next = null;
     }
 
+    public void removeFirst(){
+        first = first.next;
+    }
+
     public void arithShift(Direction dir){
         if(dir == Direction.LEFT){
             //dump sign bit (check for overflow) and addLast a zero
+            boolean overflow = first.val == 1; //will evaluate the value of the sign bit and then set the flag to true or false
+            removeFirst();
+            addNode(0);
+            if(overflow) System.out.println("Overflow detected on this arithmetic shift");
+            printList();
         }
 
         else{
             //addFirst the sign bit, remove last
+            addFirst(first.val); //adds the sign bit again to multiply by 2
+            removeLast(); //removes the last digit
+            printList();
         }
     }
 
     public void logiShift(Direction dir){
         if(dir == Direction.LEFT){
             //add last, remove first
+            addNode(0);
+            removeFirst();
+            printList();
         }
 
         else{
@@ -71,10 +86,16 @@ public class BinList {
 
     public void circShift(Direction dir){
     if(dir == Direction.LEFT){
-        //move current last to the beginning
+        //move first to the end
+        addNode(first.val);//adds the first node value to the back
+        removeFirst(); //removes it
+        printList();
     }
     else{
-        //move the current first to the end
+        //move the current last to the beginning
+        addFirst(last.val);
+        removeLast();
+        printList();
     }
 
     }
