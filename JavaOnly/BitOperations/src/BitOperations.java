@@ -1,3 +1,5 @@
+import Exceptions.InvalidNumberException;
+
 import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -7,17 +9,39 @@ import java.util.Set;
 public class BitOperations {
     //if i use arrays, then all of my operations are linear.... if i use linkedLists, then all of my operations have better time
 //TODO: set up the main in a loop so that I can continually run different numbers
-    public static void  main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Welcome to the bit operations operator!\nFirst, enter in a binary number");
-        String num = sc.nextLine();
-        validateNumber(num);
+    public static Scanner sc = new Scanner(System.in);
+    public static final int MAX_ATTEMPTS = 5;
+    public static void  main(String[] args) throws InvalidNumberException {
+        System.out.println("Welcome to the bit operations operator!");
+        String num = enterNum();
         System.out.println("Now which operation would you like to do to your number? Enter in \"c\" for circular shift, \"l\" for logical shift, and \"a\" for arithmetic shift");
         String decision = sc.next();
         System.out.println("Now enter in a direction that you want to perform the shift in. \"l\" for left and \"r\" for right");
         decision+=sc.next();
         BinList binaryList = createList(num);
         selectOP(validateString(decision), binaryList);
+    }
+
+    public static String enterNum() throws InvalidNumberException{
+        String num = "";
+        boolean isValid = false;
+        for(int i = 1;i<=MAX_ATTEMPTS;i++){
+            System.out.println("First, enter in a binary number");
+            num = sc.nextLine();
+            try{
+                 isValid = validateNumber(num);
+            }
+            catch(InvalidNumberException e){
+           if(i != MAX_ATTEMPTS){
+               System.out.println(num + " is an invalid binary number. Please enter in a new number with only 0's and 1's. You have " + (MAX_ATTEMPTS-i) + " attempts left");
+           }
+           else{
+              System.out.println("You have exceeded the number of attempts to enter a correct number. The system will now exit with the following exception:");
+               throw new InvalidNumberException(e.getMessage());
+           }
+            }
+        }
+        return num;
     }
 
     public static void selectOP(String s, BinList list){
@@ -76,16 +100,15 @@ public class BitOperations {
         }
         return validated.toString();
     }
-
-    //TODO: validate that the number is a BINARY number, will use exceptions here
-    public static void validateNumber(String num){
+    
+    public static boolean validateNumber(String num) throws InvalidNumberException{
+        boolean valid = false;
         for(char i: num.toCharArray()){
-            //throw exception here
             if(i != '0' && i != '1'){
-                System.out.println("You didn't enter a binary number. Try again");
-                break;
+                throw new InvalidNumberException(num);
             }
         }
+        return true;
     }
 
     public static BinList createList(String s){
