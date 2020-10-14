@@ -1,6 +1,6 @@
+import Exceptions.InvalidChoiceException;
 import Exceptions.InvalidNumberException;
 
-import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -11,13 +11,10 @@ public class BitOperations {
 //TODO: set up the main in a loop so that I can continually run different numbers
     public static Scanner sc = new Scanner(System.in);
     public static final int MAX_ATTEMPTS = 5;
-    public static void  main(String[] args) throws InvalidNumberException {
+    public static void  main(String[] args) throws InvalidNumberException, InvalidChoiceException {
         System.out.println("Welcome to the bit operations operator!");
         String num = enterNum();
-        System.out.println("Now which operation would you like to do to your number? Enter in \"c\" for circular shift, \"l\" for logical shift, and \"a\" for arithmetic shift");
-        String decision = sc.next();
-        System.out.println("Now enter in a direction that you want to perform the shift in. \"l\" for left and \"r\" for right");
-        decision+=sc.next();
+       String decision = enterChoice();
         BinList binaryList = createList(num);
         selectOP(validateString(decision), binaryList);
     }
@@ -42,6 +39,24 @@ public class BitOperations {
             }
         }
         return num;
+    }
+
+    //TODO: COMPLETE with try/catch for retries
+    public static String enterChoice() throws InvalidChoiceException{
+        String choice = "";
+        for(int i  = 0; i < MAX_ATTEMPTS; i++){
+            System.out.println("Now which operation would you like to do to your number? Enter in \"c\" for circular shift, \"l\" for logical shift, and \"a\" for arithmetic shift");
+            choice = sc.next();
+            System.out.println("Now enter in a direction that you want to perform the shift in. \"l\" for left and \"r\" for right");
+            choice+=sc.next();
+            try{
+                validateString(choice);
+            }
+            catch(InvalidChoiceException e){
+                
+            }
+        }
+        return choice;
     }
 
     public static void selectOP(String s, BinList list){
@@ -75,9 +90,9 @@ public class BitOperations {
                 System.exit(0);
         }
     }
-    //TODO: complete validation method, remove spaces and make sure only the letters in the set of permissible values are in there
+    //TODO: Complete validation method with exception thrownw
     //just some basic validation on the decision
-    public static String validateString(String dec){
+    public static String validateString(String dec) throws InvalidChoiceException{
         Character[] chars = {'l','r','c','a','q'};
         Set<Character> validChars = new HashSet<Character>(Arrays.asList(chars));
         StringBuilder validated = new StringBuilder();
@@ -100,7 +115,7 @@ public class BitOperations {
         }
         return validated.toString();
     }
-    
+
     public static boolean validateNumber(String num) throws InvalidNumberException{
         boolean valid = false;
         for(char i: num.toCharArray()){
