@@ -106,6 +106,7 @@ public class BinList {
             System.out.print(ptr.val);
             ptr = ptr.next;
         }
+        System.out.println();
     }
 }
 
