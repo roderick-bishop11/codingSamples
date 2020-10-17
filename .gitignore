@@ -3,3 +3,7 @@
 *.iml
 *.gradle
 *.class
+*.gradlew
+*.bat
+gradlew
+gradle
