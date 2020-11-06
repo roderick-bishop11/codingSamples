@@ -1,5 +1,6 @@
 package Models;
 
+import Helpers.FavoredParty;
 import Helpers.RandomCollection;
 import com.github.javafaker.Faker;
 import lombok.Data;
@@ -9,8 +10,10 @@ import java.util.Random;
 
 @Data
 public class Election {
+    String countyName;
+    FavoredParty countyLean; //enum for how the county leans to dictate the popularity
     public int totalVotes;
-    public List<Candidates> candidates = new ArrayList<Candidates>();
+    public List<Candidates> candidates = new ArrayList<>();
     public String winner;
     //parties with their respective estimated percentages: garnered from https://voterrecords.com/charts
     public RandomCollection parties = new RandomCollection().add(36.8, "Democratic").add(34.2,"Republican").add(0.5, "Libertarian")
@@ -18,8 +21,10 @@ public class Election {
     private int votesLeft;
     private int nthPlaceVotes;
 
-    public Election(int totalVotes){
-    this.totalVotes = totalVotes;
+    public Election(int totalVotes, String name, FavoredParty lean){
+        this.totalVotes = totalVotes;
+        countyName = name;
+        countyLean = lean;
     }
 
 public void printCandidates(){
@@ -50,7 +55,7 @@ for(int i = 0; i < 4; i++){
     //filling candidate names and parties
     String name = fakeData.name().fullName();
     Candidates candidate = new Candidates(name, (String) parties.next());
-
+/*
     //column-by-column approach
  //1st place
          nthPlaceVotes = r.nextInt(totalVotes+1);
@@ -66,11 +71,23 @@ for(int i = 0; i < 4; i++){
          votesLeft = votesLeft - nthPlaceVotes;
  //4th place
          candidate.setFourthPlaceVotes(votesLeft);
+         */
     candidates.add(candidate);
 }
+
 printCandidates();
     System.out.println("\n\n");
+    generateVotes();
 printVotes();
+}
+
+/*
+in here we need to create a vote, which has a
+ */
+public void generateVotes(){
+        for(int i = 0; i < this.totalVotes; i++){
+            Ballot.vote(this.candidates);
+        }
 }
 
 //for actually counting the votes and seeing who is in and out of the race
