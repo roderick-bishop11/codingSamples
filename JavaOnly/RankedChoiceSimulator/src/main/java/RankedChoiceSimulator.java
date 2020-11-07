@@ -2,12 +2,13 @@ import Helpers.FavoredParty;
 import Models.Election;
 import java.util.Scanner;
 
-/*  TODO: Figure out alg for voting bias based on popularity
+/*  todo: finish logic for choosing a favorite among same party candidates
+    TODO: Figure out alg for voting bias based on popularity --> wip
     TODO: Change up output
     todo: simulate how the same election would go with no ranked choice---just declare winner. taking 1st place votes only
     todo: learn about threshold
     todo: implement vote adding alg
-    todo: use nice thread.sleep to make it better, like a story of some sort.    
+    todo: use nice thread.sleep to make it better, like a story of some sort.
 
  */
 

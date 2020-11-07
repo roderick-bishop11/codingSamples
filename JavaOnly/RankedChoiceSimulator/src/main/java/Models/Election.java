@@ -4,9 +4,8 @@ import Helpers.FavoredParty;
 import Helpers.RandomCollection;
 import com.github.javafaker.Faker;
 import lombok.Data;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+
+import java.util.*;
 
 @Data
 public class Election {
@@ -19,7 +18,7 @@ public class Election {
     public RandomCollection parties = new RandomCollection().add(36.8, "Democratic").add(34.2,"Republican").add(0.5, "Libertarian")
             .add(1.3,"Independent").add(0.2, "Green").add(27.2,"Non-partisan");
     private int votesLeft;
-    private int nthPlaceVotes;
+    private int nthPlaceVotes = 0;
 
     public Election(int totalVotes, String name, FavoredParty lean){
         this.totalVotes = totalVotes;
@@ -29,9 +28,9 @@ public class Election {
 
 public void printCandidates(){
         String format = "%-25s%s%n";
-    System.out.printf(format, "Candidate:", "Party:");
+    System.out.printf(format, "Candidate:", "Party:", "Favored?");
     System.out.println("________________________________________");
-    candidates.forEach(i-> System.out.printf(format, i.getCandidateName(), i.getParty()));
+    candidates.forEach(i-> System.out.printf(format, i.getCandidateName(), i.getParty(), i.getFavored()));
 }
 
 //printing votes in a "row-by-row" fashion
@@ -45,16 +44,32 @@ public void printVotes(){
 }
 
 
-public void fillCandidates(){
-Faker fakeData = new Faker();
-Random r = new Random();
+public void fillCandidates() {
+    HashMap<Boolean, List<Candidates>> candidateFavored = new HashMap<>();
+    Faker fakeData = new Faker();
+    Random r = new Random();
+    candidateFavored.put(false, new ArrayList<Candidates>());
 //we want 4 candidates and to fill out the list.
-for(int i = 0; i < 4; i++){
-    votesLeft = totalVotes;
-    nthPlaceVotes = 0;
-    //filling candidate names and parties
-    String name = fakeData.name().fullName();
-    Candidates candidate = new Candidates(name, (String) parties.next());
+    for (int i = 0; i < 4; i++) {
+//    votesLeft = totalVotes;
+//    nthPlaceVotes = 0;
+        //filling candidate names and parties
+        String name = fakeData.name().fullName();
+        Candidates candidate = new Candidates(name, (String) parties.next());
+        candidateFavored.get(false).add(candidate);
+//    candidateFavored.get(0).stream().filter(i -> (i.getParty().equals(candidate.getParty()))).map();
+        if (candidateFavored.containsKey(false)) {
+            for (Candidates k : candidateFavored.get(false)) {
+                if (k.getParty().equals(candidate.getParty())) {
+                    if (!k.getFavored() && !candidate.getFavored()) {
+                        k.setFavored(true);
+                        candidateFavored.put(true, candidateFavored.get(0));
+                        candidateFavored.remove(false);
+                    }
+                }
+            }
+        }
+        //find other candidates with same party, pick one that is favored, if there is a favorite... don't pick and choose
 /*
     //column-by-column approach
  //1st place
@@ -72,13 +87,13 @@ for(int i = 0; i < 4; i++){
  //4th place
          candidate.setFourthPlaceVotes(votesLeft);
          */
-    candidates.add(candidate);
-}
 
-printCandidates();
-    System.out.println("\n\n");
-    generateVotes();
-printVotes();
+candidates = candidateFavored.get(true) != null? candidateFavored.get(true): candidateFavored.get(false);
+        printCandidates();
+        System.out.println("\n\n");
+        generateVotes();
+        printVotes();
+    }
 }
 
 /*
@@ -89,6 +104,7 @@ public void generateVotes(){
             Ballot.vote(this.candidates);
         }
 }
+
 
 //for actually counting the votes and seeing who is in and out of the race
 //public String processVotes(){}

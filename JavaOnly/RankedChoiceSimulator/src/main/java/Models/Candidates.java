@@ -12,12 +12,14 @@ public class Candidates {
     private int thirdPlaceVotes = 0;
     private int fourthPlaceVotes = 0;
     private double popularityFactor = 0.0;
+    private boolean favored;
 
 
     //this constructor only has the name and party which are the only args we need. The rest will be randomized
     public Candidates(String candidateName, String party){
         this.candidateName = candidateName;
         this.party = party;
+        favored = false;
     }
 
     public void add1st(int i){
@@ -32,4 +34,7 @@ public class Candidates {
         this.fourthPlaceVotes += i;
     }
 
+    public boolean getFavored() {
+        return favored;
+    }
 }
