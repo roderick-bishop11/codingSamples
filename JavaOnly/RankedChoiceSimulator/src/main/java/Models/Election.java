@@ -40,10 +40,11 @@ public void printVotes(){
         System.out.println("First place: " + candidates.get(i).getFirstPlaceVotes() + "\nSecond place: "
                 + candidates.get(i).getSecondPlaceVotes() + "\nThird place: "+ candidates.get(i).getThirdPlaceVotes()
                 + "\nFourth place: " + candidates.get(i).getFourthPlaceVotes());
+
     }
 }
 
-
+//Todo: FIND OUT WHAT I WAS THINKING HERE
 public void fillCandidates() {
     HashMap<Boolean, List<Candidates>> candidateFavored = new HashMap<>();
     Faker fakeData = new Faker();
@@ -89,7 +90,7 @@ public void fillCandidates() {
          */
 
 candidates = candidateFavored.get(true) != null? candidateFavored.get(true): candidateFavored.get(false);
-        printCandidates();
+        //printCandidates();
         System.out.println("\n\n");
         generateVotes();
         printVotes();
