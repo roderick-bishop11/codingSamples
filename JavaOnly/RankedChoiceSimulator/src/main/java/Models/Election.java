@@ -1,6 +1,6 @@
 package Models;
 
-import Helpers.FavoredParty;
+import Helpers.Party;
 import Helpers.RandomCollection;
 import com.github.javafaker.Faker;
 import lombok.Data;
@@ -10,9 +10,9 @@ import java.util.*;
 @Data
 public class Election {
     String countyName;
-    FavoredParty countyLean; //enum for how the county leans to dictate the popularity
+    Party countyLean; //enum for how the county leans to dictate the popularity
     public int totalVotes;
-    public List<Candidates> candidates = new ArrayList<>();
+    public List<Candidate_Att> candidates = new ArrayList<>();
     public String winner;
     //parties with their respective estimated percentages: garnered from https://voterrecords.com/charts
     public RandomCollection parties = new RandomCollection().add(36.8, "Democratic").add(34.2,"Republican").add(0.5, "Libertarian")
@@ -20,16 +20,16 @@ public class Election {
     private int votesLeft;
     private int nthPlaceVotes = 0;
 
-    public Election(int totalVotes, String name, FavoredParty lean){
+    public Election(int totalVotes, String name, Party lean){
         this.totalVotes = totalVotes;
         countyName = name;
         countyLean = lean;
     }
 
 public void printCandidates(){
-        String format = "%-25s%s%n";
-    System.out.printf(format, "Candidate:", "Party:", "Favored?");
-    System.out.println("________________________________________");
+        String format = "%-25s%-10s%-10b%n";
+    System.out.printf("%-25s%-10s%-10s", "Candidate:", "Party:", "Favored?");
+    System.out.println("\n_________________________");
     candidates.forEach(i-> System.out.printf(format, i.getCandidateName(), i.getParty(), i.getFavored()));
 }
 
@@ -46,55 +46,38 @@ public void printVotes(){
 
 //Todo: FIND OUT WHAT I WAS THINKING HERE
 public void fillCandidates() {
-    HashMap<Boolean, List<Candidates>> candidateFavored = new HashMap<>();
+        //boolean is for if the candidate is favored or not
+    HashMap<Boolean, List<Candidate_Att>> candidateFavored = new HashMap<>();
     Faker fakeData = new Faker();
     Random r = new Random();
-    candidateFavored.put(false, new ArrayList<Candidates>());
 //we want 4 candidates and to fill out the list.
     for (int i = 0; i < 4; i++) {
 //    votesLeft = totalVotes;
 //    nthPlaceVotes = 0;
         //filling candidate names and parties
         String name = fakeData.name().fullName();
-        Candidates candidate = new Candidates(name, (String) parties.next());
-        candidateFavored.get(false).add(candidate);
-//    candidateFavored.get(0).stream().filter(i -> (i.getParty().equals(candidate.getParty()))).map();
-        if (candidateFavored.containsKey(false)) {
-            for (Candidates k : candidateFavored.get(false)) {
-                if (k.getParty().equals(candidate.getParty())) {
-                    if (!k.getFavored() && !candidate.getFavored()) {
-                        k.setFavored(true);
-                        candidateFavored.put(true, candidateFavored.get(0));
-                        candidateFavored.remove(false);
-                    }
-                }
-            }
-        }
-        //find other candidates with same party, pick one that is favored, if there is a favorite... don't pick and choose
-/*
-    //column-by-column approach
- //1st place
-         nthPlaceVotes = r.nextInt(totalVotes+1);
-         candidate.setFirstPlaceVotes(nthPlaceVotes);
-         votesLeft = votesLeft - nthPlaceVotes;
- //2nd place
-         nthPlaceVotes = r.nextInt(votesLeft+1);
-         candidate.setSecondPlaceVotes(nthPlaceVotes);
-         votesLeft = votesLeft - nthPlaceVotes;
- //3rd place
-         nthPlaceVotes = r.nextInt(votesLeft+1);
-         candidate.setThirdPlaceVotes(nthPlaceVotes);
-         votesLeft = votesLeft - nthPlaceVotes;
- //4th place
-         candidate.setFourthPlaceVotes(votesLeft);
-         */
+        Candidate_Att candidate = new Candidate_Att(name, Party.setParty((String)parties.next()));
+        candidates.add(candidate);
+    }
+        printCandidates();
+    tieBreaker();
 
-candidates = candidateFavored.get(true) != null? candidateFavored.get(true): candidateFavored.get(false);
-        //printCandidates();
-        System.out.println("\n\n");
+    System.out.println("\n\n");
         generateVotes();
         printVotes();
+}
+
+//will break the tie between candidates and make one the favorite based on the county lean
+public void tieBreaker(){
+        List<Candidate_Att> favoredCandidates = new ArrayList<>();
+    for(Candidate_Att candidate: candidates){
+     if(candidate.getParty() == countyLean){
+         favoredCandidates.add(candidate);
+     }
     }
+
+    favoredCandidates.get((int)Math.random()*favoredCandidates.size()).setFavored(true); //sets one of the candidates as the favorite at random.
+    printCandidates();
 }
 
 /*

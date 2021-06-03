@@ -1,10 +1,11 @@
 package Models;
+import Helpers.Party;
 import lombok.Data;
 
 @Data
-public class Candidates {
+public class Candidate_Att {
     private String candidateName;
-    private String party;
+    private Party party;
 
     //default values are zero
     private int firstPlaceVotes = 0;
@@ -16,7 +17,7 @@ public class Candidates {
 
 
     //this constructor only has the name and party which are the only args we need. The rest will be randomized
-    public Candidates(String candidateName, String party){
+    public Candidate_Att(String candidateName, Party party){
         this.candidateName = candidateName;
         this.party = party;
         favored = false;

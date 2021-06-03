@@ -1,12 +1,10 @@
-import Helpers.FavoredParty;
+import Helpers.Party;
 import Models.Election;
 
-import java.sql.SQLOutput;
 import java.util.Scanner;
 
-/*  todo: finish logic for choosing a favorite among same party candidates
-    TODO: Figure out alg for voting bias based on popularity --> wip
-    TODO: Change up output
+/*  TODO: Figure out alg for voting bias based on popularity --> wip
+    TODO: Change up output -???
     todo: simulate how the same election would go with no ranked choice---just declare winner. taking 1st place votes only
     todo: learn about threshold ????
     todo: implement vote adding alg
@@ -28,20 +26,19 @@ public class RankedChoiceSimulator {
         election.fillCandidates();
     }
 
-    public static FavoredParty favor (String choice){
-        System.out.println(choice.toUpperCase());
+    public static Party favor (String choice){
         switch(choice.toUpperCase()){
             case "R":
-                return FavoredParty.REP;
+                return Party.REP;
             case "D":
-                return FavoredParty.DEM;
+                return Party.DEM;
             case "L":
-                return FavoredParty.LIB;
+                return Party.LIB;
             case "I":
-                return FavoredParty.IND;
+                return Party.IND;
             case "G":
-                return FavoredParty.GREEN;
+                return Party.GREEN;
         }
-        return FavoredParty.NON;
+        return Party.NON;
     }
 }

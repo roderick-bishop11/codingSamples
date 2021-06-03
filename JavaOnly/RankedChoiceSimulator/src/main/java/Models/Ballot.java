@@ -7,7 +7,7 @@ public class Ballot {
 
     }
 
-    public static void vote(List<Candidates> candidates){
+    public static void vote(List<Candidate_Att> candidates){
             quickShuffle(candidates);
             //this way the candidate chosen at the index of candidates will have their votes added to their respective place votes
             candidates.get(0).add1st(1);
@@ -18,7 +18,7 @@ public class Ballot {
 
 
     //fisher-yates shuffling alg --- can i find a way that based on popularity one name will show up more often???
-    public static void quickShuffle(List<Candidates> candidates){
+    public static void quickShuffle(List<Candidate_Att> candidates){
         int j = 0;
         for(int i = candidates.size()-1; i>=0; i--){
             j = (int) (Math.random() * (i-1));
@@ -26,8 +26,8 @@ public class Ballot {
         }
     }
 
-    public static void swap( List<Candidates> a, int index1, int index2){
-        Candidates temp = a.get(index1);
+    public static void swap(List<Candidate_Att> a, int index1, int index2){
+        Candidate_Att temp = a.get(index1);
         a.set(index1, a.get(index2));
         a.set(index2, temp);
     }
