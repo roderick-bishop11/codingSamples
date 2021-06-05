@@ -44,7 +44,6 @@ public void printVotes(){
     }
 }
 
-//Todo: FIND OUT WHAT I WAS THINKING HERE
 public void fillCandidates() {
         //boolean is for if the candidate is favored or not
     HashMap<Boolean, List<Candidate_Att>> candidateFavored = new HashMap<>();
