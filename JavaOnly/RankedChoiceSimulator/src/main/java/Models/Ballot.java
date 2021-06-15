@@ -1,7 +1,6 @@
 package Models;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Ballot {
    public Ballot(){

@@ -13,6 +13,7 @@ In basic terms, there is an election, within the election there are candidates a
 
 
 # Logs
+* 6/15/21- more concise logic for `tieBreaker()` along with `partyPrevalence()`, added `assign weights()` to give out popularity bonuses based on party and lean, `printPop()` to print `popularityFactor` data field for `Candidate_Att`. 
 * 6/5/21- updated README and UML.
 * 6/2/21- cleaned up some logic in fillCandidates(), added tie-breaker functionality, and Party (enum). 
 
