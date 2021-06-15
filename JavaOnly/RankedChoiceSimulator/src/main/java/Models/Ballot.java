@@ -1,12 +1,14 @@
 package Models;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Ballot {
    public Ballot(){
 
     }
 
+    //TODO: change this to assign votes based on pop values
     public static void vote(List<Candidate_Att> candidates){
             quickShuffle(candidates);
             //this way the candidate chosen at the index of candidates will have their votes added to their respective place votes
@@ -31,4 +33,7 @@ public class Ballot {
         a.set(index1, a.get(index2));
         a.set(index2, temp);
     }
+
+
+
 }

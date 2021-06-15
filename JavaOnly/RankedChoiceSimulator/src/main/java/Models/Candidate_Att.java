@@ -38,4 +38,10 @@ public class Candidate_Att {
     public boolean getFavored() {
         return favored;
     }
+
+    public void addPopFactorPoints(double added){
+        this.popularityFactor += added;
+    }
+
+
 }

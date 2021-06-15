@@ -6,11 +6,12 @@ import com.github.javafaker.Faker;
 import lombok.Data;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
 public class Election {
     String countyName;
-    Party countyLean; //enum for how the county leans to dictate the popularity
+    public static Party countyLean; //enum for how the county leans to dictate the popularity
     public int totalVotes;
     List<Party> choices = new ArrayList<Party>(4);
     public List<Candidate_Att> candidates = new ArrayList<>();
@@ -20,6 +21,7 @@ public class Election {
             .add(1.3,"Independent").add(0.2, "Green").add(27.2,"Non-partisan");
     private int votesLeft;
     private int nthPlaceVotes = 0;
+    public static Party mostPrevParty = null;
 
     public Election(int totalVotes, String name, Party lean){
         this.totalVotes = totalVotes;
@@ -33,7 +35,10 @@ public void printCandidates(){
     System.out.println("\n_________________________");
     candidates.forEach(i-> System.out.printf(format, i.getCandidateName(), i.getParty(), i.getFavored()));
 }
-
+    public void printPop(){
+    String format = "%-25s%-4f%n";
+        candidates.forEach(i->System.out.printf(format,i.getCandidateName(), i.getPopularityFactor()));
+    }
 //printing votes in a "row-by-row" fashion
 public void printVotes(){
     for(int i = 0; i < candidates.size(); i++){
@@ -65,11 +70,11 @@ public void fillCandidates() {
 
     System.out.println("\n\n");
         generateVotes();
-        printVotes();
+        assignWeights();
 }
 
 //finds the most prevalent party to perform a tie-breaker on if there are multiple candidates
-public Party partyPrevalance(){
+public Party partyPrevalence(){
     int max = 0;
     int curr = 0;
     Party currKey =  null;
@@ -87,25 +92,51 @@ public Party partyPrevalance(){
 //will break the tie between candidates of the same party
 public void tieBreaker(){
         List<Candidate_Att> favoredCandidates = new ArrayList<>();
-        Party mostPrevParty = partyPrevalance();
-    for(Candidate_Att candidate: candidates){
-     if(candidate.getParty() == mostPrevParty){
-         favoredCandidates.add(candidate);
-     }
-    }
-    favoredCandidates.get((int)Math.random()*favoredCandidates.size()).setFavored(true); //sets one of the candidates as the favorite at random.
+        mostPrevParty = partyPrevalence();
+    //finds a candidate out of the party most prevalent and sets that as the favored.
+    candidates.stream().filter(a -> a.getParty().equals(mostPrevParty)).findFirst().ifPresent(brokenTie -> brokenTie.setFavored(true));
     printCandidates();
 }
 
-/*
-in here we need to create a vote, which has a
- */
+//generates the votes from the Ballot Class
 public void generateVotes(){
         for(int i = 0; i < this.totalVotes; i++){
             Ballot.vote(this.candidates);
         }
 }
 
+    //this function assigns popularity values
+    public void assignWeights(){
+        /*cases:
+         * favored and party lean || only candidate that matches party lean: even distro +15
+         * not favored and party lean: even distro +5
+         * not favored and not party lean: even distribution +0
+         * */
+        double totalPopPoints = 100.00;
+        if(candidates.stream().anyMatch(a-> a.getParty().equals(countyLean))){
+            //not favored and party lean
+                List<Candidate_Att> sameAsLean = candidates.stream().filter(a -> a.getParty().equals(countyLean)).collect(Collectors.toList());
+                for (Candidate_Att c : sameAsLean) {
+                    c.addPopFactorPoints(5.0);
+                    totalPopPoints -= 5.0;
+                    }
+                if(sameAsLean.size() == 1){
+                    sameAsLean.get(0).addPopFactorPoints(10.0);
+                    totalPopPoints -= 10.0;
+                }
+            }
+                //favored and party lean
+            Candidate_Att mostFav = candidates.stream().filter(a-> a.getParty().equals(countyLean) && a.getFavored()).findAny().orElse(null);
+            if(mostFav != null) {
+                mostFav.setPopularityFactor(10.0);
+                totalPopPoints -= 10.0;
+            }
+        //even distro
+        for(Candidate_Att c: candidates){
+            c.addPopFactorPoints(Math.floor(totalPopPoints/ candidates.size()));
+        }
+        printPop();
+    }
 
 //for actually counting the votes and seeing who is in and out of the race
 //public String processVotes(){}
