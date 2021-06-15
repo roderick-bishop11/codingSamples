@@ -12,6 +12,7 @@ public class Election {
     String countyName;
     Party countyLean; //enum for how the county leans to dictate the popularity
     public int totalVotes;
+    List<Party> choices = new ArrayList<Party>(4);
     public List<Candidate_Att> candidates = new ArrayList<>();
     public String winner;
     //parties with their respective estimated percentages: garnered from https://voterrecords.com/charts
@@ -57,6 +58,7 @@ public void fillCandidates() {
         String name = fakeData.name().fullName();
         Candidate_Att candidate = new Candidate_Att(name, Party.setParty((String)parties.next()));
         candidates.add(candidate);
+        choices.add(candidate.getParty());
     }
         printCandidates();
     tieBreaker();
@@ -66,15 +68,31 @@ public void fillCandidates() {
         printVotes();
 }
 
-//will break the tie between candidates and make one the favorite based on the county lean
+//finds the most prevalent party to perform a tie-breaker on if there are multiple candidates
+public Party partyPrevalance(){
+    int max = 0;
+    int curr = 0;
+    Party currKey =  null;
+    Set<Party> unique = new HashSet<>(choices);
+    for (Party key : unique) {
+        curr = Collections.frequency(choices, key);
+        if(max < curr){
+            max = curr;
+            currKey = key;
+        }
+    }
+    return currKey;
+}
+
+//will break the tie between candidates of the same party
 public void tieBreaker(){
         List<Candidate_Att> favoredCandidates = new ArrayList<>();
+        Party mostPrevParty = partyPrevalance();
     for(Candidate_Att candidate: candidates){
-     if(candidate.getParty() == countyLean){
+     if(candidate.getParty() == mostPrevParty){
          favoredCandidates.add(candidate);
      }
     }
-
     favoredCandidates.get((int)Math.random()*favoredCandidates.size()).setFavored(true); //sets one of the candidates as the favorite at random.
     printCandidates();
 }
