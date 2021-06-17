@@ -7,7 +7,11 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/gorilla/mux"
 )
+
+var responseBody string
 
 func main() {
 
@@ -28,6 +32,15 @@ func main() {
 	if err != nil {
 		log.Fatal(err) //log it
 	}
-
+	responseBody = string(resp)
 	fmt.Println(string(resp)) //output the code.
+
+	//router stuff from gorilla/mux
+	router := mux.NewRouter().StrictSlash(true)
+	router.HandleFunc("/", homeLink)
+	log.Fatal(http.ListenAndServe(":8080", router))
+}
+
+func homeLink(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, responseBody)
 }
