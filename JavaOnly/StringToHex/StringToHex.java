@@ -1,4 +1,17 @@
+
+
+/*
+ * Author: Roderick Bishop
+ * 
+ * Created on: 9/25/2018
+ * 
+ * When given a string by the user, the program prints out the hex values of the characters
+ * 
+ */
+
 import java.util.Scanner;
+
+
 
 public class StringToHex{
 
@@ -19,8 +32,6 @@ public static void printHex(String s ){
     System.out.format("%H", c);
     }
 }
-
-
 
 
 }
