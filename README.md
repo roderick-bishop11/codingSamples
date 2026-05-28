@@ -1,2 +1,36 @@
 # codingSamples
-Thank you for coming to view my coding samples! Most of the samples you see are coding projects/homework assignments done in various classes that I have taken. Although most of them are in Java, I am always working to upload different versions of the same code in each language to gain proficiency. Come back often to see any updates!
+Thank you for coming to view my coding samples!
+
+This is the repo with the stuff that I'm proud of. This readme is your gateway to the bits of code I've stored along the way. 
+
+## How to navigate this repo
+
+Samples are separated in folders by language, but this readme captures **concepts** and examples can be found categorized here. 
+
+
+### Collaborative work
+     - Pomodoro Timer project
+        - [Repo blank]()
+
+### Databases
+    - Data access - queries,indexes, etc. 
+    - Analysis and management
+    - Design & Architecture
+
+
+### APIs & microservices
+
+### Frontend
+    - Vanilla
+    - Framework
+
+
+### Robotics, IoT, E&M
+    - IoT
+    - Robotics
+
+
+
+
+
+
