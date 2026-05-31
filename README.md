@@ -30,7 +30,9 @@ Samples are separated in folders by language, but this readme captures **concept
     - Robotics
 
 
-
+## DevOps & Sys admin
+    - AWS
+    - Local deployments & homelab stuff
 
 
 
