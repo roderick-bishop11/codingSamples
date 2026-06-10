@@ -10,3 +10,10 @@ Goals:
 
 Evolution: 
 Deploy this bad boy as a local MCP server!
+
+todo:
+1. tests
+2. build check
+3. extend delivery endpoint/method
+4. deploy in container
+5. move container to NAS
