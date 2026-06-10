@@ -10,7 +10,7 @@ Samples are separated in folders by language, but this readme captures **concept
 
 ### Collaborative work
      - Pomodoro Timer project
-        - [Repo blank]()
+        - [Pomodoro TImer](https://github.com/roderick-bishop11/homiesbuildingthings/tree/main/pomodoroTimer/src/pomodoro-main)
 
 ### Databases
     - Data access - queries,indexes, etc. 
@@ -20,10 +20,23 @@ Samples are separated in folders by language, but this readme captures **concept
 
 ### APIs & microservices
 
+### Backend
+     - data transmission
+     - OOP
+     - Functional
+     - O
+
 ### Frontend
     - Vanilla
     - Framework
+### Testing
+     - Unit tests
+     - Integ tests
+     - db tests
+     - load tests
+     - chaos tests
 
+     
 
 ### Robotics, IoT, E&M
     - IoT
@@ -33,6 +46,10 @@ Samples are separated in folders by language, but this readme captures **concept
 ## DevOps & Sys admin
     - AWS
     - Local deployments & homelab stuff
+
+## prompt engineering & skill architecture
+     - Skills
+     - Prompts
 
 
 
