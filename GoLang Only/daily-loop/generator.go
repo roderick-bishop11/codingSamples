@@ -56,13 +56,13 @@ func loadSkill(path string) (string, error) {
 // injecting the current date and user profile so the LLM can personalize.
 func buildUserMessage(u config.UserConfig) string {
 	now := time.Now()
-	tz := now.Location().String()
+	timezone := now.Location().String()
 
 	var sb strings.Builder
 
 	sb.WriteString(fmt.Sprintf("Today is %s (%s).\n\n",
 		now.Format("Monday, January 2, 2006 — 3:04 PM"),
-		tz,
+		timezone,
 	))
 
 	if u.Name != "" {
@@ -78,6 +78,7 @@ func buildUserMessage(u config.UserConfig) string {
 		sb.WriteString("\n--- End Context ---\n")
 	}
 
+	//this is the prompt, 
 	sb.WriteString("\nPlease generate my probabilistic daily brief now. Search for current signals first, then synthesize the report following the skill instructions exactly.")
 
 	return sb.String()

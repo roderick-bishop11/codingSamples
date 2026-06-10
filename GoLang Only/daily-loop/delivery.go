@@ -22,10 +22,10 @@ func Deliver(report string, cfg *config.Config, log *slog.Logger) error {
 		return toStdout(report)
 	case "file":
 		return toFile(report, cfg.Delivery.File, log)
-	case "webhook":
-		return toWebhook(report, cfg.Delivery.Webhook, log)
-	case "ntfy":
-		return toNtfy(report, cfg.Delivery.Ntfy, log)
+	// case "webhook":
+	// 	return toWebhook(report, cfg.Delivery.Webhook, log)
+	// case "ntfy":
+	// 	return toNtfy(report, cfg.Delivery.Ntfy, log)
 	default:
 		return fmt.Errorf("unknown delivery method: %s", cfg.Delivery.Method)
 	}
@@ -60,52 +60,52 @@ func toFile(report string, cfg config.FileDelivery, log *slog.Logger) error {
 
 // ----- Webhook (Home Assistant compatible) -----
 
-func toWebhook(report string, cfg config.WebhookDelivery, log *slog.Logger) error {
-	if cfg.URL == "" {
-		return fmt.Errorf("delivery.webhook.url is required")
-	}
+// func toWebhook(report string, cfg config.WebhookDelivery, log *slog.Logger) error {
+// 	if cfg.URL == "" {
+// 		return fmt.Errorf("delivery.webhook.url is required")
+// 	}
 
-	// Wrap in a JSON payload that Home Assistant webhooks expect.
-	payload := fmt.Sprintf(`{"report":%s}`, jsonStringEscape(report))
+// 	// Wrap in a JSON payload that Home Assistant webhooks expect.
+// 	payload := fmt.Sprintf(`{"report":%s}`, jsonStringEscape(report))
 
-	req, err := http.NewRequest(http.MethodPost, cfg.URL, strings.NewReader(payload))
-	if err != nil {
-		return fmt.Errorf("build webhook request: %w", err)
-	}
-	req.Header.Set("Content-Type", "application/json")
-	for k, v := range cfg.Headers {
-		req.Header.Set(k, v)
-	}
+// 	req, err := http.NewRequest(http.MethodPost, cfg.URL, strings.NewReader(payload))
+// 	if err != nil {
+// 		return fmt.Errorf("build webhook request: %w", err)
+// 	}
+// 	req.Header.Set("Content-Type", "application/json")
+// 	for k, v := range cfg.Headers {
+// 		req.Header.Set(k, v)
+// 	}
 
-	return doHTTP(req, log, "webhook")
-}
+// 	return doHTTP(req, log, "webhook")
+// }
 
 // ----- ntfy push notification -----
 
-func toNtfy(report string, cfg config.NtfyDelivery, log *slog.Logger) error {
-	if cfg.URL == "" {
-		return fmt.Errorf("delivery.ntfy.url is required")
-	}
+// func toNtfy(report string, cfg config.NtfyDelivery, log *slog.Logger) error {
+// 	if cfg.URL == "" {
+// 		return fmt.Errorf("delivery.ntfy.url is required")
+// 	}
 
-	// ntfy supports markdown in the body; keep report as-is.
-	// Title is the first non-empty line of the report.
-	title := extractTitle(report)
+// 	// ntfy supports markdown in the body; keep report as-is.
+// 	// Title is the first non-empty line of the report.
+// 	title := extractTitle(report)
 
-	req, err := http.NewRequest(http.MethodPost, cfg.URL, bytes.NewReader([]byte(report)))
-	if err != nil {
-		return fmt.Errorf("build ntfy request: %w", err)
-	}
-	req.Header.Set("Content-Type", "text/markdown")
-	req.Header.Set("Title", title)
-	if cfg.Priority != "" {
-		req.Header.Set("Priority", cfg.Priority)
-	}
-	if cfg.Token != "" {
-		req.Header.Set("Authorization", "Bearer "+cfg.Token)
-	}
+// 	req, err := http.NewRequest(http.MethodPost, cfg.URL, bytes.NewReader([]byte(report)))
+// 	if err != nil {
+// 		return fmt.Errorf("build ntfy request: %w", err)
+// 	}
+// 	req.Header.Set("Content-Type", "text/markdown")
+// 	req.Header.Set("Title", title)
+// 	if cfg.Priority != "" {
+// 		req.Header.Set("Priority", cfg.Priority)
+// 	}
+// 	if cfg.Token != "" {
+// 		req.Header.Set("Authorization", "Bearer "+cfg.Token)
+// 	}
 
-	return doHTTP(req, log, "ntfy")
-}
+// 	return doHTTP(req, log, "ntfy")
+// }
 
 // ----- Shared HTTP helper -----
 
