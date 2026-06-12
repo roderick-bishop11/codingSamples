@@ -53,7 +53,8 @@ Use the web_search tool for EVERY data-gathering step. Do not rely on memory or 
 - Any weather alerts or advisories
 - High/low temperature range
 - Wind conditions if notable
-**Caching**: Use cached result if <30 minutes old
+
+do not use weather.gov
 
 ### Step 4: Gather Market Data (use web_search tool)
 legend: $top_tickers = tickers specified in details.md
