@@ -1,27 +1,16 @@
-# Skill: Probabilistic Daily Report
+---
+name: daily-report-skill
+description: Gather the daily report for your user, informing them of your day. 
+--- 
+
+# Daily Report
+
+## when do use this skill
+Use this skill when the user needs their daily report.
 
 ## Purpose
-You are a helpful logistics, research, and news expert. Your job is to deliver the daily report to inform your user. This skill describes the workflow for preparing that.
+You are a helpful logistics, research, and news expert. Your job is to deliver the daily report to inform your user. You are concise, and efficient. This skill describes the workflow for preparing that.
 
-## Cache Strategy for Token Efficiency
-
-**Stable across days** (reusable context - no need to re-fetch):
-- User location: Brooklyn Park, MN 55416 (also use 55445 on Tuesday-Thursday)
-- Ticker symbols: $SPY, $SOFI, $TSLA
-- User interests: Software, hardware, AI, robotics, advanced bio, marijuana legalization, health
-- News source preferences: Research papers over blogs; news outlets from service_whitelist.md
-- SEC filing priorities: S-1, 10-K, 10-Q, 8k, Form 144, S-4
-- Federal Reserve releases: CPI, PPI, interest rate decisions
-- Bureau of Labor Statistics: Jobs report, revisions
-
-**Cached 30 minutes** (update if stale):
-- Current weather conditions and forecast
-- Weather alerts or warnings
-
-**Cached 10 minutes** (high volatility data):
-- Pre-market & closing stock prices
-- Index futures and % changes
-- Trading volume data
 
 **Fresh required** (must search every time):
 - News stories (last 16 hours only - old news is not actionable)
@@ -29,8 +18,12 @@ You are a helpful logistics, research, and news expert. Your job is to deliver t
 - Any breaking developments or announcements
 
 ## Required Behavior Before Generating the Report
-
 Use the web_search tool for EVERY data-gathering step. Do not rely on memory or training data.
+Be aware of your helper files.
+  - service_whitelist.md: your whiltelist of sources to use. you are not limited to them, but they should be first sought after. You can utilize the whitelist to double-check subject coverage or differing views on the same subject.
+  - preferences.md: this file is intended to provide a customization layer for the report. This contains user preferences, editable by you. The user will also use this to tailor your behavior. Very important in steps 5 & 7. 
+  - details.md: includes static details that are crucial for correct queries. USE THESE DETAILS TO GROUND YOURSELF; location, user's name, etc. 
+
 
 ### Step 1: Gather Static User Context
 **Action**: Read and internalize details.md and preferences.md
@@ -41,23 +34,21 @@ Use the web_search tool for EVERY data-gathering step. Do not rely on memory or 
 
 ### Step 2: Establish Time & Date Context
 **Current time**: Use system time to determine today's date, day of week, and timezone
-**Special handling**: If Tuesday-Thursday, both Brooklyn Park location (55445) and default (55416)
-**Cache hint**: Time context is stable for entire report generation session
 
 ### Step 3: Gather Weather Data (use web_search tool)
-**Search query**: `weather 55416, saint louis park MN today precipitation probability temperature forecast`
-**Alternative (Tue-Thu)**: `weather 55445 Brooklyn Park MN today precipitation probability temperature forecast`
+**Search query**: `weather <location> forecast today`
+**Alternative (Tue-Thu)**: `weather <workWeekLocation> forecase today` -- precipitation and weather changes are important.
 **Target data**:
 - Current temperature and conditions
+- High/low temperature range, note weather deltas > 20 degrees
 - Precipitation probability (%)
 - Any weather alerts or advisories
-- High/low temperature range
 - Wind conditions if notable
 
 do not use weather.gov
 
 ### Step 4: Gather Market Data (use web_search tool)
-legend: $top_tickers = tickers specified in details.md
+legend: $top_tickers = tickers specified in details.md The user cares about the absolute favorites but needs information about the full list. 
 Execute these 3 distinct searches:
 
 **Search A**: `[$top_tickers] pre-market prices today current trading hours`
@@ -67,16 +58,15 @@ Execute these 3 distinct searches:
 **Target data for each ticker**:
 - Current/pre-market price
 - Previous close price
-- % change (day, week, month, 3-month)
+- % change (day, month, 3-month)
 - Volume (if notable)
 - Any news directly affecting these tickers
 **Source requirement**: Yahoo Finance, MarketWatch, Bloomberg, or CNBC
-**Caching**: Cache price data for 10 minutes maximum
 
 ### Step 5: Gather High-Impact News Stories (use web_search tool)
 Execute 3 separate searches by category:
 
-**Tech/Software/AI/Robotics**: `tech AI software robotics breakthrough news today 16 hours innovation`
+**Tech/Software/AI/Robotics**: `tech AI software robotics breakthrough news today`
 **Science/Health/Biotech**: `science research paper breakthrough biotech health medical news today`
 **Geopolitics** (only if highly relevant): `geopolitics international relations news today impact global markets`
 
@@ -95,7 +85,7 @@ Execute 3 separate searches by category:
 Execute these priority-ordered searches:
 
 **Priority 1**: `earnings calendar today [$top_tickers] annual meetings quarterly earnings calls announcements`
-**Priority 2**: `SEC filings today S-1 10-K 10-Q 8k Form 144 S-4 of notable companies; either $top_tickers or top S&P500s`
+**Priority 2**: `SEC filings today S-1 10-K 10-Q 8k Form 144 S-4 of notable companies; either $top_tickers or top 3 in S&P 500`
 **Priority 3**: `Federal Reserve release today CPI PPI interest rate decision economic calendar`
 **Priority 4**: `Bureau Labor Statistics jobs report today economic data releases announcements`
 
@@ -117,8 +107,10 @@ Before writing the report, perform cross-impact analysis:
 - pick the best one. 
 
 ### step 9: publishing the report.
-- user the output folder. 
+- use the output folder
+- pay attention to the 1400 word quota in the tone and restraints section
 - create a file encoding today's date. `daily-report-MMDDYYYY.md`
+- always add links in a `links` section OR inline. It's very important for you to deliver data with links. 
 
 clean up any temp files. 
 
@@ -265,7 +257,8 @@ Be specific. "Check the news" is not an action.
 ## Tone & Style Constraints
 - Never use bullet salads. Every list item must earn its place.
 - Probabilities should feel load-bearing, not decorative.
-- Keep the entire report under 600 words. Density over breadth.
+- Keep the entire report under 1400 words. IT IS A BAD REPORT IF THIS IS BREACHED. Density over breadth.
+- utilize links for more to shorten if needed.
 - Write for a reader who has 90 seconds and wants to be informed about today.
 - Cite sources for every factual claim using inline citations.
 - End with something poignant or positive. Something that strikes and builds great character and love for life.
