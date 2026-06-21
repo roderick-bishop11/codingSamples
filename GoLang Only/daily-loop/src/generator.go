@@ -13,9 +13,15 @@ import (
 	"github.com/yourusername/daily-loop/internal/config"
 )
 
+// LLMClient is the interface the Generator uses to call the language model.
+// The real *anthropic.Client satisfies this; tests can inject a fake.
+type LLMClient interface {
+	RunWithWebSearch(ctx context.Context, systemPrompt, userMsg string) (string, error)
+}
+
 // Generator produces the daily report by calling the LLM with the skill.
 type Generator struct {
-	client *anthropic.Client
+	client LLMClient
 	cfg    *config.Config
 	log    *slog.Logger
 }
