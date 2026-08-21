@@ -48,13 +48,13 @@ type Message struct {
 }
 
 type Content struct {
-	Type       string      `json:"type"`
-	Text       string      `json:"text,omitempty"`
-	ID         string      `json:"id,omitempty"`         // tool_use id
-	Name       string      `json:"name,omitempty"`       // tool name
-	Input      interface{} `json:"input,omitempty"`      // tool input
-	ToolUseID  string      `json:"tool_use_id,omitempty"`// tool_result ref
-	IsError    bool        `json:"is_error,omitempty"`
+	Type      string      `json:"type"`
+	Text      string      `json:"text,omitempty"`
+	ID        string      `json:"id,omitempty"`          // tool_use id
+	Name      string      `json:"name,omitempty"`        // tool name
+	Input     interface{} `json:"input,omitempty"`       // tool input
+	ToolUseID string      `json:"tool_use_id,omitempty"` // tool_result ref
+	IsError   bool        `json:"is_error,omitempty"`
 	// Content field for tool_result can be string or []Content
 	ToolResult interface{} `json:"-"`
 }
@@ -90,10 +90,10 @@ type Tool struct {
 }
 
 type response struct {
-	ID         string    `json:"id"`
-	StopReason string    `json:"stop_reason"`
+	ID         string       `json:"id"`
+	StopReason string       `json:"stop_reason"`
 	Content    []rawContent `json:"content"`
-	Error      *apiError `json:"error,omitempty"`
+	Error      *apiError    `json:"error,omitempty"`
 }
 
 type rawContent struct {

@@ -10,10 +10,10 @@ import (
 
 // Config is the root configuration for daily-loop.
 type Config struct {
-	Schedule ScheduleConfig  `yaml:"schedule"`
+	Schedule  ScheduleConfig  `yaml:"schedule"`
 	Anthropic AnthropicConfig `yaml:"anthropic"`
-	User     UserConfig      `yaml:"user"`
-	Delivery DeliveryConfig  `yaml:"delivery"`
+	User      UserConfig      `yaml:"user"`
+	Delivery  DeliveryConfig  `yaml:"delivery"`
 }
 
 type ScheduleConfig struct {
@@ -31,37 +31,37 @@ type AnthropicConfig struct {
 }
 
 type UserConfig struct {
-	Name     string `yaml:"name"`
-	Location string `yaml:"location"`
+	Name             string `yaml:"name"`
+	Location         string `yaml:"location"`
 	WorkWeekLocation string `yaml:"work_week_location"`
 	// Context is freeform text appended to the user message — calendar snippets,
 	// standing interests, notes, etc.
 	Context string `yaml:"context"`
 }
 
-//todo: simplify delivery
+// DeliveryConfig selects where the finished report should be sent.
 type DeliveryConfig struct {
 	// Method: stdout | file | webhook | ntfy
-	Method string `yaml:"method"`
+	Method  string          `yaml:"method"`
 	File    FileDelivery    `yaml:"file"`
-	// Webhook WebhookDelivery `yaml:"webhook"`
-	// Ntfy    NtfyDelivery    `yaml:"ntfy"`
+	Webhook WebhookDelivery `yaml:"webhook"`
+	Ntfy    NtfyDelivery    `yaml:"ntfy"`
 }
 
 type FileDelivery struct {
 	Path string `yaml:"path"`
 }
 
-// type WebhookDelivery struct {
-// 	URL     string            `yaml:"url"`
-// 	Headers map[string]string `yaml:"headers"`
-// }
+type WebhookDelivery struct {
+	URL     string            `yaml:"url"`
+	Headers map[string]string `yaml:"headers"`
+}
 
-// type NtfyDelivery struct {
-// 	URL      string `yaml:"url"`      // e.g. https://ntfy.sh/my-topic
-// 	Priority string `yaml:"priority"` // default | high | urgent
-// 	Token    string `yaml:"token"`    // optional auth token
-// }
+type NtfyDelivery struct {
+	URL      string `yaml:"url"`      // e.g. https://ntfy.sh/my-topic
+	Priority string `yaml:"priority"` // default | high | urgent
+	Token    string `yaml:"token"`    // optional auth token
+}
 
 // Load reads config from the given YAML file path, then overlays
 // environment variable overrides.
@@ -102,6 +102,9 @@ func defaults() *Config {
 			Method: "stdout",
 			Ntfy: NtfyDelivery{
 				Priority: "default",
+			},
+			Webhook: WebhookDelivery{
+				Headers: map[string]string{},
 			},
 		},
 	}

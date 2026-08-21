@@ -9,18 +9,23 @@ import (
 	"strings"
 	"time"
 
-	"github.com/yourusername/daily-loop/internal/anthropic"
 	"github.com/yourusername/daily-loop/internal/config"
 )
 
+// LLMClient is the interface the Generator uses to call the language model.
+// The real *anthropic.Client satisfies this; tests can inject a fake.
+type LLMClient interface {
+	RunWithWebSearch(ctx context.Context, systemPrompt, userMsg string) (string, error)
+}
+
 // Generator produces the daily report by calling the LLM with the skill.
 type Generator struct {
-	client *anthropic.Client
+	client LLMClient
 	cfg    *config.Config
 	log    *slog.Logger
 }
 
-func New(client *anthropic.Client, cfg *config.Config, log *slog.Logger) *Generator {
+func New(client LLMClient, cfg *config.Config, log *slog.Logger) *Generator {
 	return &Generator{client: client, cfg: cfg, log: log}
 }
 
@@ -78,7 +83,7 @@ func buildUserMessage(u config.UserConfig) string {
 		sb.WriteString("\n--- End Context ---\n")
 	}
 
-	//this is the prompt, 
+	//this is the prompt,
 	sb.WriteString("\nPlease generate my probabilistic daily brief now. Search for current signals first, then synthesize the report following the skill instructions exactly.")
 
 	return sb.String()
