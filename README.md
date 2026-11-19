@@ -19,6 +19,9 @@ Samples are separated in folders by language, but this readme captures **concept
 
 
 ### APIs & microservices
+    - REST
+    - gRPC
+    - Websocket
 
 ### Backend
      - data transmission
